@@ -7,20 +7,21 @@ public class Main {
         crawler.callGetPageLinks();
 
         GraphAnalysis graphAnalysis = new GraphAnalysis(crawler.getPages());
+        graphAnalysis.findVertexWithHighestDegree();
 //        graphAnalysis.getNumberOfVertices();
 //        graphAnalysis.getNumberOfEdges();
 //        graphAnalysis.distributionOfDegreesIn();
 //        graphAnalysis.distributionOfDegreesOut();
-  //        graphAnalysis.findShortestPathForAll();
-//        graphAnalysis.findShortestPath("https://www.google.pl/", "https://www.google.com/calendar?tab=ic");
+//          graphAnalysis.findShortestPathForAll();
+//        //graphAnalysis.findShortestPath("https://www.google.pl/", "https://www.google.com/calendar?tab=ic");
 //        graphAnalysis.graphDiameter();
 //        graphAnalysis.averageDistance();
-        graphAnalysis.coefficientOfClustering();
-
-//        graphAnalysis.crashSimulation();
+//        graphAnalysis.coefficientOfClustering();
+//
+//       graphAnalysis.crashSimulation();
 //        graphAnalysis.attackSimulation();
-
-        PageRank pageRank = new PageRank(crawler.getPages());
-        pageRank.pageRankFormula();
+//
+//        PageRank pageRank = new PageRank(crawler.getPages());
+//        pageRank.pageRankFormula();
     }
 }

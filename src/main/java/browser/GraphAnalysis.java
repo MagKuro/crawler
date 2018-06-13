@@ -400,6 +400,7 @@ public class GraphAnalysis {
                 index = pages.indexOf(page);
             }
         }
+        System.out.println("Url max stopień"+ pages.get(index).getUrl());
 
         return index;
     }

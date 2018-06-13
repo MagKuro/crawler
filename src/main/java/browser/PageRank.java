@@ -55,16 +55,18 @@ public class PageRank {
                 else{
                     System.out.println("liczba rodziców zero!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
+
+                if(i==1){
+                    pagerank1.save(String.valueOf(tab[i][vertex]));
+                }
+                if(i==20){
+                    pagerank20.save(String.valueOf(tab[i][vertex]));
+                }
+                if(i==100){
+                    pagerank100.save(String.valueOf(tab[i][vertex]));
+                }
             }
-            if(numberOfIterations==1){
-                pagerank1.save(String.valueOf(tab[numberOfIterations-1][i]));
-            }
-            if(numberOfIterations==20){
-                pagerank20.save(String.valueOf(tab[numberOfIterations-1][i]));
-            }
-            if(numberOfIterations==100){
-                pagerank100.save(String.valueOf(tab[numberOfIterations-1][i]));
-            }
+
         }
 
         pagerank1.close();
