@@ -2,12 +2,16 @@ package browser;
 
 public class Main {
     public static void main(String[] args) {
+
+
+
         Crawler crawler = new Crawler();
-        crawler.addNewPageToList("https://www.ohio.edu/");
+      //  crawler.addNewPageToList("https://www.ohio.edu/");
+        crawler.addNewPageToList("http://gut.animima.org/mi2018/");
         crawler.callGetPageLinks();
 
-        GraphAnalysis graphAnalysis = new GraphAnalysis(crawler.getPages());
-        graphAnalysis.findVertexWithHighestDegree();
+        //GraphAnalysis graphAnalysis = new GraphAnalysis(crawler.getPages());
+       // graphAnalysis.findVertexWithHighestDegree();
 //        graphAnalysis.getNumberOfVertices();
 //        graphAnalysis.getNumberOfEdges();
 //        graphAnalysis.distributionOfDegreesIn();

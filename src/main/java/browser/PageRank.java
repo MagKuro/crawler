@@ -56,15 +56,15 @@ public class PageRank {
                     System.out.println("liczba rodziców zero!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 }
 
-                if(i==1){
-                    pagerank1.save(String.valueOf(tab[i][vertex]));
-                }
-                if(i==20){
-                    pagerank20.save(String.valueOf(tab[i][vertex]));
-                }
-                if(i==100){
-                    pagerank100.save(String.valueOf(tab[i][vertex]));
-                }
+//                if(i==1){
+//                    pagerank1.save(String.valueOf(tab[i][vertex]));
+//                }
+//                if(i==20){
+//                    pagerank20.save(String.valueOf(tab[i][vertex]));
+//                }
+//                if(i==100){
+//                    pagerank100.save(String.valueOf(tab[i][vertex]));
+//                }
             }
 
         }
@@ -73,11 +73,19 @@ public class PageRank {
         pagerank20.close();
         pagerank100.close();
 
+        double max=0.0;
+        int maxIndex=0;
+
         for(int i=0; i<size; i++){
             valueOfPagerank = (1.0-damping)/size+damping*tab[numberOfIterations-1][i];
+            if(max<valueOfPagerank){
+                max=valueOfPagerank;
+                maxIndex = i;
+            }
             pages.get(i).setPageRank(valueOfPagerank);
-            System.out.println("pagerank wynosi: " + pages.get(i).getPageRank());
+           // System.out.println("pagerank wynosi: " + pages.get(i).getPageRank());
         }
+        System.out.println("NAJPOPULARNIEJSZA STRONA: "+ pages.get(maxIndex).getUrl());
 
         double suma=0;
         for (int i=0; i<size; i++){

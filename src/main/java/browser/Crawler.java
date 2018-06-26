@@ -32,7 +32,7 @@ public class Crawler {
     }
 
     public void callGetPageLinks(){
-        for(int i=0; i<2000 && i<pages.size(); i++) {
+        for(int i=0; i<20 && i<pages.size(); i++) {
             //System.out.println("SPRAWDZAM DLA: "+ pages.get(i).getUrl());
             parentId = i;
             getPageLinks(pages.get(i));
@@ -56,22 +56,23 @@ public class Crawler {
 
     public void getPageLinks(Page page){
 
-//        boolean hasAccess = true;
-//        try {
-//            InputStream robotsTxtStream = new URL(page.getUrl()).openStream();
-//            RobotsTxt robotsTxt = RobotsTxt.read(robotsTxtStream);
-//            hasAccess = robotsTxt.query(null,"/robots.txt");
-//            System.out.println(hasAccess);
-//
-//        } catch (IOException e) {
-//            //e.printStackTrace();
-//        }
+        boolean hasAccess = true;
+        try {
+            InputStream robotsTxtStream = new URL(page.getUrl()).openStream();
+            RobotsTxt robotsTxt = RobotsTxt.read(robotsTxtStream);
+            hasAccess = robotsTxt.query(null,"/robots.txt");
+
+        } catch (IOException e) {
+            //e.printStackTrace();
+        }
         try {
             //if(hasAccess) {
 //                Document doc = Jsoup.connect(page.getUrl()).get();
 //                List<Element> linksOnPage = doc.select("a[href]");
             Connection connection = Jsoup.connect(page.getUrl()).userAgent(USER_AGENT);
             Document doc = connection.get();
+            String htmlString = Jsoup.parse(doc.toString()).select("body").text();
+            System.out.println(htmlString);
 
             if (connection.response().contentType().contains("text/html")){
                 List<Element> linksOnPage = doc.select("a[href]");
@@ -82,7 +83,7 @@ public class Crawler {
             }
 
             for (String linkOnPage : urls) {
-                if (linkOnPage.startsWith("https://www.ohio")) {  //sprawdzam domene
+               // if (linkOnPage.startsWith("https://www.ohio")) {  //sprawdzam domene
                     //System.out.println("linkOnPage: "+linkOnPage);
                     if (!ifListContainPageWithUrl(linkOnPage)) {     //lista nie zawiera strony
                         //System.out.println("nowy link na stronie: "+linkOnPage);
@@ -97,7 +98,7 @@ public class Crawler {
                     //uzupelnij listy rodziców i dzieci
                     pages.get(childId).addParent(pages.get(parentId).getUrl());
                     pages.get(parentId).addChildren(pages.get(childId).getUrl());
-                }
+              // }
             }
         }
            // }
