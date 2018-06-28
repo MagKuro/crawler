@@ -7,8 +7,8 @@ public class Main {
 
         Crawler crawler = new Crawler();
       //  crawler.addNewPageToList("https://www.ohio.edu/");
-        crawler.addNewPageToPages("https://en.wikipedia.org/wiki/Informatics");
-        crawler.callGetPageLinks("https://en.wikipedia.org/wiki/Informatics");
+        crawler.addNewPageToPages("https://pg.edu.pl/");
+        crawler.callGetPageLinks("https://pg.edu.pl/");
 
         //GraphAnalysis graphAnalysis = new GraphAnalysis(crawler.getPages());
        // graphAnalysis.findVertexWithHighestDegree();

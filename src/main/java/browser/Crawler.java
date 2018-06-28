@@ -13,6 +13,7 @@ import java.io.InputStream;
 
 import com.panforge.robotstxt.RobotsTxt;
 
+import javax.print.Doc;
 import java.net.URL;
 import java.util.*;
 
@@ -41,7 +42,7 @@ public class Crawler {
 
     public void callGetPageLinks(String home) {
         HOME = home;
-        for (int i = 0; i < 1 && i < pages.size(); i++) {
+        for (int i = 0; i < 2 && i < pages.size(); i++) {
             //System.out.println("SPRAWDZAM DLA: "+ pages.get(i).getUrl());
             parentId = i;
             getPageLinks(pages.get(i));
@@ -86,11 +87,11 @@ public class Crawler {
                     //oczyszczenie linksOnPage z duplikatow
                     Set<String> urls = new HashSet<>();
                     for (Element linkOnPage : linksOnPage) {
-                        urls.add(linkOnPage.attr("href"));
+                        urls.add(linkOnPage.absUrl("href"));
                     }
 
                     for (String linkOnPage : urls) {
-                        if (linkOnPage.startsWith(HOME)) {  //sprawdzam domene
+                        if (linkOnPage.startsWith(HOME) && isHtml(linkOnPage)) {  //sprawdzam domene
                             if (!isPagesContainsPage(linkOnPage)) {     //lista pages nie zawiera strony
                                 addNewPageToPages(linkOnPage);   //dodaj strone do listy
                                 childId = pages.size() - 1;
@@ -110,6 +111,21 @@ public class Crawler {
         } catch (IOException e) {
             //e.printStackTrace();
         }
+    }
+
+    private boolean isHtml(String url){
+
+        try {
+            Connection connect = Jsoup.connect(url).userAgent(USER_AGENT);
+            Document doc = connect.get();
+            if (connect.response().contentType().contains("text/html")){
+                return true;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Map<String, Integer> createLocalTerms(String url) {
