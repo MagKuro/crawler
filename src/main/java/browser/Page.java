@@ -3,6 +3,7 @@ package browser;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class Page {
 
@@ -14,12 +15,15 @@ public class Page {
 
     private double pageRank;
 
+    private Map<String, Integer> localTerms;
+
     public Page(){
 
     }
 
-    public Page(String url){
+    public Page(String url, Map<String, Integer> localTerms){
         this.url = url;
+        this.localTerms = localTerms;
     }
 
     public String getUrl() {
@@ -52,5 +56,13 @@ public class Page {
 
     public void addChildren(String url){
         childrens.add(url);
+    }
+
+    public Map<String, Integer> getLocalTerms() {
+        return localTerms;
+    }
+
+    public void setLocalTerms(Map<String, Integer> localTerms) {
+        this.localTerms = localTerms;
     }
 }
