@@ -1,7 +1,5 @@
 package browser;
 
-import java.util.Map;
-
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
@@ -11,7 +9,7 @@ public class FuzzyKMeans {
     private double clusters[][];
     private int  k;
     private double[][] distances; //= new double[points.length][clusters.length];
-    private double[][] probability; // = new double[points.length][clusters.length];
+    private double[][][] probability; // = new double[points.length][clusters.length];
     private int dimension;
 
     public FuzzyKMeans(int k){
@@ -28,12 +26,13 @@ public class FuzzyKMeans {
         this.dimension = points[0].length;
     }
 
-    public double[][] doKMeans(){
+    public double[][][] doKMeans(){
         distances = new double[points.length][clusters.length];
-        probability = new double[points.length][clusters.length];
+        probability = new double[2][points.length][clusters.length];
+
         boolean isRepeated;
         do{
-            isRepeated = assignPointsToClusters();
+            isRepeated = !assignPointsToClusters();
             calculateTheNewCentroid();
         }while(isRepeated);
         for(int c =0; c<clusters.length; c++){
@@ -53,7 +52,7 @@ public class FuzzyKMeans {
 
     // wypełniamy tablice probability i distances
     public boolean assignPointsToClusters(){
-        boolean isChange = false;
+        boolean isConvergance = false;
         for(int p=0; p<points.length; p++){
             double minDistance = 0;
             int minIndex = 0;
@@ -73,40 +72,79 @@ public class FuzzyKMeans {
                 }
             }
             for(int c=0; c<clusters.length; c++){
-                if(c==minIndex){
-                    if(probability[p][c]==0){
-                        isChange = true;
-                    }
-                    probability[p][c] = 1;
-                    continue;
+//                if(c==minIndex){
+//                    if(probability[p][c][0]==0){
+//                        isConvergance = true;
+//                    }
+//                    probability[p][c][0] = 1;
+//                    continue;
+//                }
+//                double oldProbability = -1;
+//                if(isFirst){
+//                    oldProbability = probability[p][c][0];
+//                }
+
+                //CHCEMY ZAMIENIAĆ STARE PRAWDOPODOBIEŃSTWO NA NOWE
+               // probability[1]=probability[0];
+
+
+                //uzupełnienie prawdopodobienstwa
+                probability[0][p][c] = 0;
+                for(int c2 = 0; c2<clusters.length; c2++){
+                    //spr dzielenie przez zero
+                    probability[0][p][c] = probability[0][p][c]+pow(distances[p][c]/distances[p][c2], 2);
                 }
-                probability[p][c] = 0;
+                //spr dzielenie przez zero
+                probability[0][p][c] = 1/probability[0][p][c];
             }
         }
-        return isChange;
+        //sprawdzenie zbieznosci
+        isConvergance = isConvergent(0.01);
+
+        //zamiana prawdopodobieństwa
+        for(int c=0; c<clusters.length; c++){
+            for(int p=0; p<points.length; p++){
+                probability[1][p][c]=probability[0][p][c];
+            }
+        }
+        return isConvergance;
+    }
+
+    private boolean isConvergent(double precision){
+        for(int p=0; p<points.length; p++){
+            double minuend = 0;
+            double subtrahend = 0;
+            for(int c=0; c<clusters.length; c++){
+                minuend = minuend + pow(probability[0][p][c], 2);
+                subtrahend = subtrahend + pow(probability[1][p][c], 2);
+            }
+            if((minuend-subtrahend)>precision){
+                return false;
+            }
+        }
+        return true;
     }
 
     private void calculateTheNewCentroid(){
         for(int c=0; c<clusters.length; c++){
             double sum [] = new double[points[0].length];
-            int occurrence = 0;
+            double squareOfProbabilities = 0;
             for(int p=0; p<points.length; p++){
-                if(probability[p][c]==1){
+                if(probability[0][p][c]!=0){
                     for(int d = 0; d < dimension; d++){
-                        sum[d] = sum[d] + points[p][d];
+                        sum[d] = sum[d] + (pow(probability[0][p][c], 2) * points[p][d]) ;
                     }
-                    occurrence++;
+                    squareOfProbabilities = squareOfProbabilities + pow(probability[0][p][c], 2);
                 }
             }
             try{
                 for(int d = 0; d < dimension; d++){
-                    clusters[c][d] = sum[d]/occurrence;
+                    clusters[c][d] = sum[d]/squareOfProbabilities;
                 }
             }
             catch(ArithmeticException e){
                 System.out.println("UWAGA! DZIELENIE PRZEZ ZERO, ZMIEŃ WSPOŁRZĘDNE CENTROIDU.");
             }
-
         }
     }
 }
