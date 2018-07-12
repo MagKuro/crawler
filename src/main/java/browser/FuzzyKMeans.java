@@ -13,8 +13,10 @@ public class FuzzyKMeans {
     private int dimension;
 
     public FuzzyKMeans(int k){
-        this.points = new double[][]{{1, 3}, {1.5, 3.2}, {1.3, 2.6}, {3, 1}};//{{2, 2, 1}, {2,4, 1}, {4,1, 1}, {5,4, 1}, {8,5, 1}, {9,7, 1}, {10,5, 1}};
-        this.clusters = new double [][] {{1.26, 3}, {3, 1}}; //{{1, 2, 1}, {3, 5, 2}};
+//        this.points = new double[][]{{1, 3}, {1.5, 3.2}, {1.3, 2.6}, {3, 1}};
+//        this.clusters = new double [][] {{1.26, 3}, {3, 1}};
+        this.points = new double[][] {{2, 2, 1}, {2,4, 1}, {4,1, 1}, {5,4, 1}, {8,5, 1}, {9,7, 1}, {10,5, 1}};
+        this.clusters = new double [][] {{1, 2, 1}, {3, 5, 2}};
         this.k = k;
         this.dimension = points[0].length;
     }
@@ -26,7 +28,7 @@ public class FuzzyKMeans {
         this.dimension = points[0].length;
     }
 
-    public double[][][] doKMeans(){
+    public double[][][] doFuzzyKMeans(){
         distances = new double[points.length][clusters.length];
         probability = new double[2][points.length][clusters.length];
 
@@ -53,13 +55,14 @@ public class FuzzyKMeans {
     // wypełniamy tablice probability i distances
     public boolean assignPointsToClusters(){
         boolean isConvergance = false;
-        for(int p=0; p<points.length; p++){
-            for(int c=0; c<clusters.length; c++){
+        for(int p=0; p<points.length; p++) { //p1
+            //obliczanie dystansu
+            for (int c = 0; c < clusters.length; c++) { //c1
                 double distance = countDistances(clusters[c], points[p]);
                 distances[p][c] = distance;
             }
+            //obliczanie prawdopodobieństwa
             for(int c=0; c<clusters.length; c++){
-                //uzupełnienie prawdopodobienstwa
                 probability[0][p][c] = 0;
                 for(int c2 = 0; c2<clusters.length; c2++){
                     //spr dzielenie przez zero

@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         FuzzyKMeans fuzzyKMeans = new FuzzyKMeans(NUMBEROFCLUSTERS);
-        double[][][] tab = fuzzyKMeans.doKMeans();
+        double[][][] tab = fuzzyKMeans.doFuzzyKMeans();
 
         for(int c=0; c<NUMBEROFCLUSTERS; c++){
             System.out.println("Klaster o indeksie: "+ c +" prawdopodobienstwa: ");
