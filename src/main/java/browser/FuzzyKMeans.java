@@ -13,8 +13,8 @@ public class FuzzyKMeans {
     private int dimension;
 
     public FuzzyKMeans(int k){
-        this.points = new double[][]{{2, 2, 1}, {2,4, 1}, {4,1, 1}, {5,4, 1}, {8,5, 1}, {9,7, 1}, {10,5, 1}};
-        this.clusters = new double [][] {{1, 2, 1}, {3, 5, 2}};
+        this.points = new double[][]{{1, 3}, {1.5, 3.2}, {1.3, 2.6}, {3, 1}};//{{2, 2, 1}, {2,4, 1}, {4,1, 1}, {5,4, 1}, {8,5, 1}, {9,7, 1}, {10,5, 1}};
+        this.clusters = new double [][] {{1.26, 3}, {3, 1}}; //{{1, 2, 1}, {3, 5, 2}};
         this.k = k;
         this.dimension = points[0].length;
     }
@@ -37,7 +37,7 @@ public class FuzzyKMeans {
         }while(isRepeated);
         for(int c =0; c<clusters.length; c++){
 
-            System.out.println("Nowe wspolrzedne klastra: " + clusters[c][0]+", "+clusters[c][1] +", "+clusters[c][2]);
+            System.out.println("Nowe wspolrzedne klastra: " + clusters[c][0]+", "+clusters[c][1] );
         }
         return probability;
     }
@@ -54,48 +54,29 @@ public class FuzzyKMeans {
     public boolean assignPointsToClusters(){
         boolean isConvergance = false;
         for(int p=0; p<points.length; p++){
-            double minDistance = 0;
-            int minIndex = 0;
             for(int c=0; c<clusters.length; c++){
-                if(c==0){
-                    //zmiana
-                    minDistance = countDistances(clusters[c], points[p]);
-                    distances[p][c] = minDistance;
-                    minIndex = c;
-                    continue;
-                }
                 double distance = countDistances(clusters[c], points[p]);
                 distances[p][c] = distance;
-                if(minDistance>distance){
-                    minDistance = distance;
-                    minIndex = c;
-                }
             }
             for(int c=0; c<clusters.length; c++){
-//                if(c==minIndex){
-//                    if(probability[p][c][0]==0){
-//                        isConvergance = true;
-//                    }
-//                    probability[p][c][0] = 1;
-//                    continue;
-//                }
-//                double oldProbability = -1;
-//                if(isFirst){
-//                    oldProbability = probability[p][c][0];
-//                }
-
-                //CHCEMY ZAMIENIAĆ STARE PRAWDOPODOBIEŃSTWO NA NOWE
-               // probability[1]=probability[0];
-
-
                 //uzupełnienie prawdopodobienstwa
                 probability[0][p][c] = 0;
                 for(int c2 = 0; c2<clusters.length; c2++){
                     //spr dzielenie przez zero
+                    if(distances[p][c]==0){
+                        probability[0][p][c] = 1;
+                        continue;
+                    }
+                    if(distances[p][c2]==0){
+                        probability[0][p][c] = 0;
+                        continue;
+                    }
                     probability[0][p][c] = probability[0][p][c]+pow(distances[p][c]/distances[p][c2], 2);
                 }
                 //spr dzielenie przez zero
-                probability[0][p][c] = 1/probability[0][p][c];
+                if(probability[0][p][c]!=0){
+                    probability[0][p][c] = 1/probability[0][p][c];
+                }
             }
         }
         //sprawdzenie zbieznosci
@@ -112,8 +93,8 @@ public class FuzzyKMeans {
 
     private boolean isConvergent(double precision){
         for(int p=0; p<points.length; p++){
-            double minuend = 0;
-            double subtrahend = 0;
+            double minuend = 0; //ujemna
+            double subtrahend = 0; //ujemnik
             for(int c=0; c<clusters.length; c++){
                 minuend = minuend + pow(probability[0][p][c], 2);
                 subtrahend = subtrahend + pow(probability[1][p][c], 2);
