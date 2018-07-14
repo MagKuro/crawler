@@ -44,10 +44,6 @@ public class FuzzyKMeans {
             isRepeated = !assignPointsToClusters();
             calculateTheNewCentroid();
         }while(isRepeated);
-        for(int c =0; c<clusters.length; c++){
-
-            System.out.println("Nowe wspolrzedne klastra: " + clusters[c][0]+", "+clusters[c][1]+", "+clusters[c][2]+ ", "+clusters[c][3]  );
-        }
         return probability;
     }
 

@@ -42,7 +42,7 @@ public class Crawler {
 
     public List<Page>  callGetPageLinks(String home) {
         HOME = home;
-        for (int i = 0; i < 1 && i < pages.size(); i++) {
+        for (int i = 0; i < 100 && i < pages.size(); i++) {
             //System.out.println("SPRAWDZAM DLA: "+ pages.get(i).getUrl());
             parentId = i;
             getPageLinks(pages.get(i));
