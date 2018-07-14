@@ -23,7 +23,7 @@ public class FuzzyKMeans {
 
     public FuzzyKMeans(double[][] points, int k) {
         this.points = points;
-        this.clusters = new double [][] {{1, 2, 1}, {3, 5, 2}};
+        this.clusters = new double [][] {{0, 0, 0, 0, 0, 0}, {2, 1, 2, 1,0, 0}};
         this.k = k;
         this.dimension = points[0].length;
     }
@@ -46,7 +46,7 @@ public class FuzzyKMeans {
         }while(isRepeated);
         for(int c =0; c<clusters.length; c++){
 
-            System.out.println("Nowe wspolrzedne klastra: " + clusters[c][0]+", "+clusters[c][1] );
+            System.out.println("Nowe wspolrzedne klastra: " + clusters[c][0]+", "+clusters[c][1]+", "+clusters[c][2]+ ", "+clusters[c][3]  );
         }
         return probability;
     }
