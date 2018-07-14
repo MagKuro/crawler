@@ -21,6 +21,13 @@ public class FuzzyKMeans {
         this.dimension = points[0].length;
     }
 
+    public FuzzyKMeans(double[][] points, int k) {
+        this.points = points;
+        this.clusters = new double [][] {{1, 2, 1}, {3, 5, 2}};
+        this.k = k;
+        this.dimension = points[0].length;
+    }
+
     public FuzzyKMeans(double[][] points, double[][] clusters, int k) {
         this.points = points;
         this.clusters = clusters;

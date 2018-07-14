@@ -1,11 +1,18 @@
 package browser;
 
+import java.util.List;
+
 public class Main {
     static int NUMBEROFCLUSTERS = 2;
 
     public static void main(String[] args) {
 
-        FuzzyKMeans fuzzyKMeans = new FuzzyKMeans(NUMBEROFCLUSTERS);
+        Crawler crawler = new Crawler();
+
+        crawler.addNewPageToPages("https://pg.edu.pl/");
+        crawler.callGetPageLinks("https://pg.edu.pl/");
+        VectorCreater vectorCreater = new VectorCreater(crawler.getGlobalTerm(), crawler.getPages());
+        FuzzyKMeans fuzzyKMeans = new FuzzyKMeans(vectorCreater.createPointsTable(), NUMBEROFCLUSTERS);
         double[][][] tab = fuzzyKMeans.doFuzzyKMeans();
 
         for(int c=0; c<NUMBEROFCLUSTERS; c++){
@@ -14,27 +21,6 @@ public class Main {
                     System.out.println(tab[0][p][c]);
             }
         }
-
-//        Crawler crawler = new Crawler();
-//
-//        crawler.addNewPageToPages("https://pg.edu.pl/");
-//        crawler.callGetPageLinks("https://pg.edu.pl/");
-
-        //GraphAnalysis graphAnalysis = new GraphAnalysis(crawler.getPages());
-       // graphAnalysis.findVertexWithHighestDegree();
-//        graphAnalysis.getNumberOfVertices();
-//        graphAnalysis.getNumberOfEdges();
-//        graphAnalysis.distributionOfDegreesIn();
-//        graphAnalysis.distributionOfDegreesOut();
-//          graphAnalysis.findShortestPathForAll();
-//        //graphAnalysis.findShortestPath("https://www.google.pl/", "https://www.google.com/calendar?tab=ic");
-//        graphAnalysis.graphDiameter();
-//        graphAnalysis.averageDistance();
-//        graphAnalysis.coefficientOfClustering();
-//
-//       graphAnalysis.crashSimulation();
-//        graphAnalysis.attackSimulation();
-//
 //        PageRank pageRank = new PageRank(crawler.getPages());
 //        pageRank.pageRankFormula();
     }

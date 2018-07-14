@@ -26,28 +26,29 @@ public class Crawler {
     private int parentId;
     private int childId;
     private static String HOME;
+    private Set<String> globalTerm = new HashSet();
 
     public Crawler() {
         pages = new ArrayList<Page>();
     }
 
-    public List<Page> getPages() {
-        return pages;
-    }
+
 
     public void addNewPageToPages(String url) {
         Page page = new Page(url, createLocalTerms(url));
+        addLocalTermsToGlobalTerms(page.getLocalTerms());
         pages.add(page);
     }
 
-    public void callGetPageLinks(String home) {
+    public List<Page>  callGetPageLinks(String home) {
         HOME = home;
-        for (int i = 0; i < 2 && i < pages.size(); i++) {
+        for (int i = 0; i < 1 && i < pages.size(); i++) {
             //System.out.println("SPRAWDZAM DLA: "+ pages.get(i).getUrl());
             parentId = i;
             getPageLinks(pages.get(i));
             //System.out.println("KONIEC CYKLU " + i);
         }
+        return pages;
     }
 
     public boolean isPagesContainsPage(String url) {
@@ -128,6 +129,10 @@ public class Crawler {
         return false;
     }
 
+    private void addLocalTermsToGlobalTerms(Map<String, Integer> localTerms){
+        globalTerm.addAll(localTerms.keySet());
+    }
+
     public Map<String, Integer> createLocalTerms(String url) {
         PorterStemmer porterStemmer = new PorterStemmer();
         Connection connect = Jsoup.connect(url).userAgent(USER_AGENT);
@@ -166,5 +171,13 @@ public class Crawler {
             e.printStackTrace();
         }
         return words;
+    }
+
+    public Set<String> getGlobalTerm() {
+        return globalTerm;
+    }
+
+    public List<Page> getPages() {
+        return pages;
     }
 }
