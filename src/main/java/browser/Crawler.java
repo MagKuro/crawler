@@ -13,12 +13,12 @@ import java.io.InputStream;
 
 import com.panforge.robotstxt.RobotsTxt;
 
-import javax.print.Doc;
 import java.net.URL;
 import java.util.*;
 
 public class Crawler {
 
+    private final int numberOfIterations = 100;
     private static final String USER_AGENT =
             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1";
 
@@ -32,8 +32,6 @@ public class Crawler {
         pages = new ArrayList<Page>();
     }
 
-
-
     public void addNewPageToPages(String url) {
         Page page = new Page(url, createLocalTerms(url));
         addLocalTermsToGlobalTerms(page.getLocalTerms());
@@ -42,7 +40,7 @@ public class Crawler {
 
     public List<Page>  callGetPageLinks(String home) {
         HOME = home;
-        for (int i = 0; i < 100 && i < pages.size(); i++) {
+        for (int i = 0; i < numberOfIterations && i < pages.size(); i++) {
             //System.out.println("SPRAWDZAM DLA: "+ pages.get(i).getUrl());
             parentId = i;
             getPageLinks(pages.get(i));
